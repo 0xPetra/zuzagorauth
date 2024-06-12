@@ -13,7 +13,7 @@
     "@pcd/eddsa-ticket-pcd": "^0.6.1",
     "@pcd/email-pcd": "^0.6.1",
     "@pcd/eslint-config-custom": "^0.11.1",
-    "@pcd/passport-interface": "^0.11.2",
+    "@pcd/passport-interface": "^0.11.3",
     "@pcd/passport-ui": "^0.11.1",
     "@pcd/pcd-types": "^0.11.1",
     "@pcd/semaphore-identity-pcd": "^0.11.1",
