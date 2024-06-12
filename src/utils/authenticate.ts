@@ -1,12 +1,13 @@
+import { PCD, SerializedPCD } from "@pcd/pcd-types";
 
-export const authenticate = async (pcdStr: string) => {
+export const authenticate = async (multiPCDs: SerializedPCD<PCD<unknown, unknown>>[]) => {
   try {
       const response = await fetch(`/api/auth/authenticate`, {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json'
           },
-          body: pcdStr
+          body: multiPCDs as unknown as BodyInit
       });
 
       const data = await response.json();

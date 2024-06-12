@@ -708,6 +708,19 @@
     lodash "^4.17.21"
     uuid "^9.0.0"
 
+"@pcd/eddsa-frog-pcd@0.3.2":
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/@pcd/eddsa-frog-pcd/-/eddsa-frog-pcd-0.3.2.tgz#f1c3abcddd4442201b2dbf37f47e5c0e7fc95b14"
+  integrity sha512-VAX4zz5G2I7sxZsO93rIeovGfFaPSX1/WMex5qTJrTHJ7Bx1shf0imGbtjnmbJtHufEXLbBpRfTCsWyr4O8+Ng==
+  dependencies:
+    "@pcd/eddsa-pcd" "0.6.2"
+    "@pcd/pcd-types" "0.11.2"
+    "@pcd/util" "0.5.2"
+    chai "^4.3.7"
+    json-bigint "^1.0.0"
+    lodash "^4.17.21"
+    uuid "^9.0.0"
+
 "@pcd/eddsa-pcd@0.6.1", "@pcd/eddsa-pcd@^0.6.1":
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/@pcd/eddsa-pcd/-/eddsa-pcd-0.6.1.tgz#194ce34d8691a17581c834090112f3471aa1c6be"
@@ -715,6 +728,16 @@
   dependencies:
     "@pcd/pcd-types" "0.11.1"
     "@pcd/util" "0.5.1"
+    circomlibjs "^0.1.7"
+    uuid "^9.0.0"
+
+"@pcd/eddsa-pcd@0.6.2", "@pcd/eddsa-pcd@^0.6.2":
+  version "0.6.2"
+  resolved "https://registry.yarnpkg.com/@pcd/eddsa-pcd/-/eddsa-pcd-0.6.2.tgz#2d3c0b705f53afc21f9561e59dcc6b7c99a0463c"
+  integrity sha512-CSBBXF58bfJ+HCEw8Yt6UdZ0FosFRvUKn4y5088rYg6fjyfCMiHcqAFbuu6wV/sw6Wq7gJx3Br0E7ht/jDz7CQ==
+  dependencies:
+    "@pcd/pcd-types" "0.11.2"
+    "@pcd/util" "0.5.2"
     circomlibjs "^0.1.7"
     uuid "^9.0.0"
 
@@ -726,6 +749,20 @@
     "@pcd/eddsa-pcd" "0.6.1"
     "@pcd/pcd-types" "0.11.1"
     "@pcd/util" "0.5.1"
+    chai "^4.3.7"
+    json-bigint "^1.0.0"
+    lodash "^4.17.21"
+    url-join "4.0.1"
+    uuid "^9.0.0"
+
+"@pcd/eddsa-ticket-pcd@0.6.2":
+  version "0.6.2"
+  resolved "https://registry.yarnpkg.com/@pcd/eddsa-ticket-pcd/-/eddsa-ticket-pcd-0.6.2.tgz#52ef6aa511d4219e75addcf54a9ec1e9515f51a4"
+  integrity sha512-6UutY/fQJnAJp5Vpre1VXtSiBxZsyjn9jPuGwwyDGNuxjhE9v9taHMTTdKjGHFxdVsR3J7Pnr/0YcGwoBOm5MQ==
+  dependencies:
+    "@pcd/eddsa-pcd" "0.6.2"
+    "@pcd/pcd-types" "0.11.2"
+    "@pcd/util" "0.5.2"
     chai "^4.3.7"
     json-bigint "^1.0.0"
     lodash "^4.17.21"
@@ -745,10 +782,30 @@
     lodash "^4.17.21"
     uuid "^9.0.0"
 
+"@pcd/email-pcd@^0.6.2":
+  version "0.6.2"
+  resolved "https://registry.yarnpkg.com/@pcd/email-pcd/-/email-pcd-0.6.2.tgz#a73f64af536cca355977e3173e3f630edeeb781f"
+  integrity sha512-FU12cq7iPXK/ScF4isdtP483VKChRhwkvN/no7AQzW+FIhwlqwW76n7rgoFO+yKyKMprMet63omoOJ6bBSvK8g==
+  dependencies:
+    "@pcd/eddsa-pcd" "0.6.2"
+    "@pcd/pcd-types" "0.11.2"
+    "@pcd/util" "0.5.2"
+    chai "^4.3.7"
+    json-bigint "^1.0.0"
+    lodash "^4.17.21"
+    uuid "^9.0.0"
+
 "@pcd/emitter@0.5.1":
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/@pcd/emitter/-/emitter-0.5.1.tgz#5087a3f706d298cb0b9d4a03654e817155cb2140"
   integrity sha512-mV9PTpBfTJ6WDbn1M+cXoOW4XnXX5wNY//GDXDeW4BGXR/t5gUwL8DujEWNY74dMgbRHoT+Tl8884r7QT7vF1A==
+  dependencies:
+    chai "^4.3.7"
+
+"@pcd/emitter@0.5.2":
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/@pcd/emitter/-/emitter-0.5.2.tgz#d9f6e3759de9bee46d6025ca660888e65aedb555"
+  integrity sha512-Ac/MfULpUVZVy0O2C1KXuKboORc/oKOs3bbJ/iBX0f4N1FCa6mBZ4VF/ij58yk4f8M08EJlK8v/OXMiGNI/Jrw==
   dependencies:
     chai "^4.3.7"
 
@@ -780,10 +837,27 @@
     "@pcd/util" "^0.5.1"
     uuid "^9.0.1"
 
+"@pcd/obj-pcd@0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@pcd/obj-pcd/-/obj-pcd-0.0.3.tgz#a4f31cae45c25e39cc0c8c2cf520a45b7d0c2a67"
+  integrity sha512-j+WVnPzXjj+EFSPtiICOGd1k/Wei+1MfDvJuuRwJCfWqfz0xgvTBJr/kFwghaKU2Nz2NxHsWW/13Ap4XhDY12Q==
+  dependencies:
+    "@pcd/pcd-types" "^0.11.2"
+    "@pcd/util" "^0.5.2"
+    uuid "^9.0.1"
+
 "@pcd/passport-crypto@0.11.1":
   version "0.11.1"
   resolved "https://registry.yarnpkg.com/@pcd/passport-crypto/-/passport-crypto-0.11.1.tgz#2716e9f30f126a067561364a146015d21ba59c58"
   integrity sha512-WMPBEuCb8dpCNyj/nqF4MeSkPZv2EBx+NDFELD9njzlGkzlO11mjZN4S297Q1BfQNBCY+h4gyMLLrRls4nDJ5Q==
+  dependencies:
+    buffer "^6.0.3"
+    libsodium-wrappers-sumo "^0.7.11"
+
+"@pcd/passport-crypto@0.11.2":
+  version "0.11.2"
+  resolved "https://registry.yarnpkg.com/@pcd/passport-crypto/-/passport-crypto-0.11.2.tgz#a7377b13faf434a4bdd7a1c7d33a924b3df64557"
+  integrity sha512-KVh6rQ9qzMhLnSYZNDCDN83c5s/A2W/bW+wXsOzn0cWM0r0a8s06GDGw1psfLsyj9KByONFWoLimSUrbUqpN8g==
   dependencies:
     buffer "^6.0.3"
     libsodium-wrappers-sumo "^0.7.11"
@@ -808,6 +882,34 @@
     "@pcd/semaphore-identity-pcd" "0.11.1"
     "@pcd/semaphore-signature-pcd" "0.11.1"
     "@pcd/util" "0.5.1"
+    "@semaphore-protocol/identity" "^3.15.2"
+    fast-json-stable-stringify "^2.1.0"
+    js-sha256 "^0.10.1"
+    lodash "^4.17.21"
+    url-join "4.0.1"
+    uuid "^9.0.0"
+    zod "^3.22.4"
+
+"@pcd/passport-interface@^0.11.3":
+  version "0.11.3"
+  resolved "https://registry.yarnpkg.com/@pcd/passport-interface/-/passport-interface-0.11.3.tgz#ace25ed4c4c7c1aef41549d01aaa74bad4ba8069"
+  integrity sha512-RAT8Pn892bEU0ZhLgdclSUUrP/IRWxi126b7RYnJMoMdyyQPPT6cOpG9n1QLJ+Q6r124RyVMKiVBe+C1YarTpw==
+  dependencies:
+    "@pcd/eddsa-frog-pcd" "0.3.2"
+    "@pcd/eddsa-pcd" "^0.6.2"
+    "@pcd/eddsa-ticket-pcd" "0.6.2"
+    "@pcd/email-pcd" "^0.6.2"
+    "@pcd/emitter" "0.5.2"
+    "@pcd/obj-pcd" "0.0.3"
+    "@pcd/passport-crypto" "0.11.2"
+    "@pcd/pcd-collection" "0.11.2"
+    "@pcd/pcd-types" "0.11.2"
+    "@pcd/pod" "0.1.2"
+    "@pcd/pod-pcd" "0.1.2"
+    "@pcd/semaphore-group-pcd" "0.11.2"
+    "@pcd/semaphore-identity-pcd" "0.11.2"
+    "@pcd/semaphore-signature-pcd" "0.11.2"
+    "@pcd/util" "0.5.2"
     "@semaphore-protocol/identity" "^3.15.2"
     fast-json-stable-stringify "^2.1.0"
     js-sha256 "^0.10.1"
@@ -841,10 +943,29 @@
     lodash "^4.17.21"
     uuid "^9.0.0"
 
+"@pcd/pcd-collection@0.11.2":
+  version "0.11.2"
+  resolved "https://registry.yarnpkg.com/@pcd/pcd-collection/-/pcd-collection-0.11.2.tgz#38403708097d3f0dd59cefe717f773e2989a928f"
+  integrity sha512-mdvcIe4SCEzlI5fLCWs0mARkXpGbduRHHv4b4IQBd8JaQkOudkc4BB14LBSOg1MQr/eQntX4AQ3cYqZiUb1yFg==
+  dependencies:
+    "@pcd/emitter" "0.5.2"
+    "@pcd/passport-crypto" "0.11.2"
+    "@pcd/pcd-types" "0.11.2"
+    "@pcd/semaphore-identity-pcd" "0.11.2"
+    chai "^4.3.7"
+    fast-json-stable-stringify "^2.1.0"
+    lodash "^4.17.21"
+    uuid "^9.0.0"
+
 "@pcd/pcd-types@0.11.1", "@pcd/pcd-types@^0.11.1":
   version "0.11.1"
   resolved "https://registry.yarnpkg.com/@pcd/pcd-types/-/pcd-types-0.11.1.tgz#8ad8b4560b829e60205981abb1f52212c4015b68"
   integrity sha512-wTjeMuglVNf2JiwNiedgzstbrKOLqKs3g3MdZ12HRaGHehtFDIZXNwFxVP6tkNzrmm3zXyAnp8qqzYDOHTKmPw==
+
+"@pcd/pcd-types@0.11.2", "@pcd/pcd-types@^0.11.2":
+  version "0.11.2"
+  resolved "https://registry.yarnpkg.com/@pcd/pcd-types/-/pcd-types-0.11.2.tgz#89a4bc5d30d5c364f75321c31efe61fed946be36"
+  integrity sha512-x6Gm1wTiR/ly7aW5ScY33e3pG+GBtPzBVUp98ntcIMd4uADKeKUlNMBmprddq378ATG4FaB9aXwCJp3nEKSSHQ==
 
 "@pcd/pod-pcd@0.1.1":
   version "0.1.1"
@@ -857,12 +978,37 @@
     json-bigint "^1.0.0"
     uuid "^9.0.0"
 
+"@pcd/pod-pcd@0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@pcd/pod-pcd/-/pod-pcd-0.1.2.tgz#ba8e699e2cade6e842b580d2284cb461b8ffc085"
+  integrity sha512-gxYuI++OJQ2rvRRkJuyI8iCB36NmIVfqR7b8hVyc7OnaQVjNGZtJnB7cS0+Iim92WZ+RcCMB3otJKzSfSkRloQ==
+  dependencies:
+    "@pcd/pcd-types" "0.11.2"
+    "@pcd/pod" "0.1.2"
+    "@pcd/util" "0.5.2"
+    json-bigint "^1.0.0"
+    uuid "^9.0.0"
+
 "@pcd/pod@0.1.1":
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/@pcd/pod/-/pod-0.1.1.tgz#1a699083aae5407f41665c5f6cac89c633f23cf6"
   integrity sha512-gTphxqrsefVGdrPdywqtF6hCgxbbqXebRlHaUJe6KA41QuPRPtSIuQIxjIZ6fAUL8V+E4RrWvhpQaUG7US1uLg==
   dependencies:
     "@pcd/util" "0.5.1"
+    "@zk-kit/baby-jubjub" "1.0.0-beta"
+    "@zk-kit/eddsa-poseidon" "1.0.0-beta"
+    "@zk-kit/imt" "2.0.0-beta.4"
+    "@zk-kit/utils" "1.0.0-beta.4"
+    js-sha256 "^0.10.1"
+    json-bigint "^1.0.0"
+    poseidon-lite "^0.2.0"
+
+"@pcd/pod@0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@pcd/pod/-/pod-0.1.2.tgz#1e2c0810b5b5490419556d05aff52432dfd487cb"
+  integrity sha512-RtH99SY+sk5uZQ0g901k4u4snHRDpRwr4TH9EUHHbRflto78ZQaCwvPylyA0f2NgG//9ObmmEPOey4HkqfcACQ==
+  dependencies:
+    "@pcd/util" "0.5.2"
     "@zk-kit/baby-jubjub" "1.0.0-beta"
     "@zk-kit/eddsa-poseidon" "1.0.0-beta"
     "@zk-kit/imt" "2.0.0-beta.4"
@@ -887,6 +1033,22 @@
     typescript "^5.3.3"
     uuid "^9.0.0"
 
+"@pcd/semaphore-group-pcd@0.11.2":
+  version "0.11.2"
+  resolved "https://registry.yarnpkg.com/@pcd/semaphore-group-pcd/-/semaphore-group-pcd-0.11.2.tgz#6fbae31ca388efa8c0c3544bd5539b57eff8ccae"
+  integrity sha512-dppJexrLdIpq/MVtBlRR3uCTCnX3lsynqUdUZoff72mYN8w+euTGlU3bq+qjlZy1NvC/K9JHmfyVdXjJQbZ6UQ==
+  dependencies:
+    "@pcd/pcd-types" "0.11.2"
+    "@pcd/semaphore-identity-pcd" "0.11.2"
+    "@pcd/semaphore-signature-pcd" "0.11.2"
+    "@pcd/util" "0.5.2"
+    "@semaphore-protocol/group" "^3.15.2"
+    "@semaphore-protocol/identity" "^3.15.2"
+    "@semaphore-protocol/proof" "^3.15.2"
+    json-bigint "^1.0.0"
+    typescript "^5.3.3"
+    uuid "^9.0.0"
+
 "@pcd/semaphore-identity-pcd@0.11.1", "@pcd/semaphore-identity-pcd@^0.11.1":
   version "0.11.1"
   resolved "https://registry.yarnpkg.com/@pcd/semaphore-identity-pcd/-/semaphore-identity-pcd-0.11.1.tgz#f409e6b99487a1ff7c60f5a933cf48a71e38e5a3"
@@ -894,6 +1056,17 @@
   dependencies:
     "@pcd/pcd-types" "0.11.1"
     "@pcd/util" "0.5.1"
+    "@semaphore-protocol/identity" "^3.15.2"
+    json-bigint "^1.0.0"
+    uuid "^9.0.0"
+
+"@pcd/semaphore-identity-pcd@0.11.2":
+  version "0.11.2"
+  resolved "https://registry.yarnpkg.com/@pcd/semaphore-identity-pcd/-/semaphore-identity-pcd-0.11.2.tgz#84c91f81a02ece7bf8e551f72b152de4e82a7c4d"
+  integrity sha512-mFIWxGG8t4xcA9WN99gGhdQHtml8maCfRb6eAXSJg5QZOOblVt91SpMZI1Wvkl/m6gZf8p9g4TT1mz/FFuOHcQ==
+  dependencies:
+    "@pcd/pcd-types" "0.11.2"
+    "@pcd/util" "0.5.2"
     "@semaphore-protocol/identity" "^3.15.2"
     json-bigint "^1.0.0"
     uuid "^9.0.0"
@@ -912,10 +1085,35 @@
     json-bigint "^1.0.0"
     uuid "^9.0.0"
 
+"@pcd/semaphore-signature-pcd@0.11.2":
+  version "0.11.2"
+  resolved "https://registry.yarnpkg.com/@pcd/semaphore-signature-pcd/-/semaphore-signature-pcd-0.11.2.tgz#900ca0e2219b867ce0b3156efdd0ffd46eaff8ba"
+  integrity sha512-bAfdRMd2PXzIcUmA41q84rBz57q6Ji25QkFFav4tlb2qfKLI64PFEGK2QtK6//cV7emRVZVcKlkea46ck2BjYg==
+  dependencies:
+    "@pcd/pcd-types" "0.11.2"
+    "@pcd/semaphore-identity-pcd" "0.11.2"
+    "@pcd/util" "0.5.2"
+    "@semaphore-protocol/group" "^3.15.2"
+    "@semaphore-protocol/identity" "^3.15.2"
+    "@semaphore-protocol/proof" "^3.15.2"
+    json-bigint "^1.0.0"
+    uuid "^9.0.0"
+
 "@pcd/util@0.5.1", "@pcd/util@^0.5.1":
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/@pcd/util/-/util-0.5.1.tgz#fae9ceded4418312d6a1a46cd033f4bc3aab8115"
   integrity sha512-+gjJACUV6mDZtfgCEIOv79cyJv0xkEseI2iuV9gvpLwm5DZy94JZg9YdPgsOKZU1R4roaXv30/7RWsYt7y368g==
+  dependencies:
+    buffer "^6.0.3"
+    email-validator "^2.0.4"
+    js-sha256 "^0.10.1"
+    secure-random "^1.1.2"
+    uuid "^9.0.0"
+
+"@pcd/util@0.5.2", "@pcd/util@^0.5.2":
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/@pcd/util/-/util-0.5.2.tgz#5ba20eb3b79f32d14b6eaf1ddd0cd9db5a439e4f"
+  integrity sha512-pdrlAZ8Za0BfBrVeXhCTunulvIIoJE/CgCyYFmJ5Lx1z/Pr/hl+ncnrtTIiqO5dzyoNYCx15+uPOCJ/ipIX8uw==
   dependencies:
     buffer "^6.0.3"
     email-validator "^2.0.4"

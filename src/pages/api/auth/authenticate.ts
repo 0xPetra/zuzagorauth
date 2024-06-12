@@ -17,7 +17,7 @@ declare module "iron-session" {
 
 const authRoute = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
-      const { pcd: inputPCD } = req.body;
+      const { pcds: inputPCDs } = req.body;
       const pcd = await ZKEdDSAEventTicketPCDPackage.deserialize(req.body.pcd);
       const nonce = req.session?.nonce
 
@@ -26,7 +26,7 @@ const authRoute = async (req: NextApiRequest, res: NextApiResponse) => {
          return
       }
 
-      if (!inputPCD) {
+      if (!inputPCDs) {
          res.status(400).json({ message: 'No PCD specified.' });
          return
       }

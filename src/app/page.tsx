@@ -1,6 +1,7 @@
 "use client";
 import { useZupass } from "@/zupass";
 import { useZupassPopupMessages } from "@pcd/passport-interface";
+import { PCD, SerializedPCD } from "@pcd/pcd-types";
 import Link from "next/link";
 import { ReadonlyURLSearchParams, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -16,11 +17,7 @@ export default function Home() {
   const [inputParams, setInputParams] = useState<InputParams | null>(null);
   const { login } = useZupass();
 
-  // @ts-ignore
   const [pcdStr, _pendingPCDStr, multiPCDs] = useZupassPopupMessages();
-  console.log("🚀 ~ Home ~ pcdStr:", pcdStr)
-  console.log("🚀 ~ Home ~ _pendingPCDStr:", _pendingPCDStr)
-  console.log("🚀 ~ Home ~ multiPCDs:", multiPCDs)
   
   const searchParams = useSearchParams();
 
@@ -47,22 +44,20 @@ export default function Home() {
 
   useEffect(() => {
     (async () => {
-      if (pcdStr) {
-        processProof(pcdStr);
+      if (multiPCDs) {
+        processProof(multiPCDs);
       }
     })();
-  }, [pcdStr]);
+  }, [multiPCDs]);
 
   const loginHandler = async () => {
     setloading(true);
     await login(inputParams);
   };
 
-  const processProof = async (proof: string) => {
+  const processProof = async (multiPCDs: SerializedPCD<PCD<unknown, unknown>>[]) => {
     try {
-      const parsedProof = JSON.parse(proof);
-      parsedProof.pcd = JSON.parse(parsedProof.pcd);
-      const response = await authenticate(pcdStr);
+      const response = await authenticate(multiPCDs);
       console.log("🚀 ~ processProof ~ response:", response)
       const returnSSOURL = inputParams?.return_sso_url; // This is an example; use the actual return_sso_url from your payload.
 
