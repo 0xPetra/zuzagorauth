@@ -1,8 +1,10 @@
-// Import necessary modules and types
 import { generateSignature } from "@/utils/generateSignature";
 import { supportedEvents, whitelistedTickets } from "@/zupass-config";
 import { isEqualEdDSAPublicKey } from "@pcd/eddsa-pcd";
-import { ZKEdDSAEventTicketPCDPackage } from "@pcd/zk-eddsa-event-ticket-pcd";
+import {
+  ZKEdDSAEventTicketPCD,
+  ZKEdDSAEventTicketPCDPackage
+} from "@pcd/zk-eddsa-event-ticket-pcd";
 import { withIronSessionApiRoute } from "iron-session/next";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -15,19 +17,22 @@ declare module "iron-session" {
   }
 }
 
+type TicketType = keyof typeof whitelistedTickets;
+
 const authRoute = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const { body: pcds } = req;
 
-    // Validate input format
     if (!Array.isArray(pcds) || pcds.length === 0) {
       return res
         .status(400)
         .json({ message: "No PCDs specified or invalid input format." });
     }
 
-    const validPcds = [];
-    const responses = [];
+    console.log("Received PCDs:", pcds); // Log received PCDs
+
+    const validPcds: ZKEdDSAEventTicketPCD[] = [];
+    const responses: { error: string; status: number }[] = [];
     const nonce = req.session?.nonce;
 
     if (!nonce) {
@@ -36,14 +41,16 @@ const authRoute = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const bigIntNonce = BigInt("0x" + nonce);
 
-    // Process each PCD in the request
     for (const { type, pcd: inputPCD } of pcds) {
+      console.log("Processing PCD:", inputPCD); // Log input PCD
+
       if (type !== "zk-eddsa-event-ticket-pcd") {
         responses.push({ error: `Invalid PCD type: ${type}`, status: 400 });
         continue;
       }
 
       const pcd = await ZKEdDSAEventTicketPCDPackage.deserialize(inputPCD);
+      console.log("Deserialized PCD:", pcd); // Log deserialized PCD
 
       if (!inputPCD || !pcd) {
         responses.push({
@@ -71,16 +78,6 @@ const authRoute = async (req: NextApiRequest, res: NextApiResponse) => {
         continue;
       }
 
-      // // Check if the PCD has already been used
-      // if (nullifiers.has(pcd.claim.nullifierHash)) {
-      //   responses.push({
-      //     error: "PCD ticket has already been used",
-      //     status: 401
-      //   });
-      //   continue;
-      // }
-
-      // Validate the event ID
       if (pcd.claim.partialTicket.eventId) {
         const eventId = pcd.claim.partialTicket.eventId;
         if (!supportedEvents.includes(eventId)) {
@@ -91,7 +88,6 @@ const authRoute = async (req: NextApiRequest, res: NextApiResponse) => {
           continue;
         }
       } else {
-        // Validate against valid event IDs
         let eventError = false;
         for (const eventId of pcd.claim.validEventIds ?? []) {
           if (!supportedEvents.includes(eventId)) {
@@ -106,17 +102,26 @@ const authRoute = async (req: NextApiRequest, res: NextApiResponse) => {
         if (eventError) continue;
       }
 
-      // Add the nullifier hash to the set
-      nullifiers.add(pcd.claim.nullifierHash);
-      req.session.user = pcd.claim.nullifierHash;
-      await req.session.save();
+      // Check for duplicate PCDs
+      const existingPcd = validPcds.find(
+        (validPcd) => validPcd.claim.nullifierHash === pcd.claim.nullifierHash
+      );
+      if (!existingPcd) {
+        nullifiers.add(pcd.claim.nullifierHash);
+        req.session.user = pcd.claim.nullifierHash;
+        await req.session.save();
 
-      // Push valid PCDs to the array
-      validPcds.push(pcd);
+        validPcds.push(pcd);
+      } else {
+        console.log("Duplicate PCD found and skipped:", pcd); // Log duplicate PCD
+      }
     }
 
-    // Generate signature if there are valid PCDs
+    console.log("Valid PCDs after processing:", validPcds); // Log valid PCDs
+
     if (validPcds.length > 0) {
+      console.log("Valid PCDs for generateSignature:", validPcds);
+
       const { encodedPayload, signature, ticketType } = await generateSignature(
         validPcds,
         nonce
@@ -128,11 +133,9 @@ const authRoute = async (req: NextApiRequest, res: NextApiResponse) => {
           .json({ message: "Signature couldn't be generated" });
       }
 
-      // Get the public key from whitelisted tickets
-      const tickets = whitelistedTickets[ticketType];
+      const tickets = whitelistedTickets[ticketType as unknown as TicketType];
       const publicKey = tickets[0].publicKey;
 
-      // Verify each PCD against the public key (optional, depending on your logic)
       for (const pcd of validPcds) {
         if (!isEqualEdDSAPublicKey(publicKey, pcd.claim.signer)) {
           responses.push({ error: "PCD is not signed by Zupass", status: 401 });
@@ -140,18 +143,15 @@ const authRoute = async (req: NextApiRequest, res: NextApiResponse) => {
         }
       }
 
-      // Construct the final response object
       const finalResponse = {
-        attendeeEmail: validPcds[0].claim.partialTicket.attendeeEmail, // Assuming all PCDs have the same attendee email
+        attendeeEmail: validPcds[0].claim.partialTicket.attendeeEmail,
         encodedPayload,
         sig: signature,
         status: 200
       };
 
-      // Send the final response
       res.status(200).json(finalResponse);
     } else {
-      // If no valid PCDs were found
       res.status(400).json({ message: "No valid PCDs found" });
     }
   } catch (error: any) {
@@ -160,7 +160,6 @@ const authRoute = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-// Iron session options
 const ironOptions = {
   cookieName: process.env.SESSION_COOKIE_NAME as string,
   password: process.env.SESSION_PASSWORD as string,
@@ -169,5 +168,4 @@ const ironOptions = {
   }
 };
 
-// Export withIronSessionApiRoute with authRoute and ironOptions
 export default withIronSessionApiRoute(authRoute, ironOptions);

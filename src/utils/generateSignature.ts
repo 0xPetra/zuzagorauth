@@ -1,4 +1,3 @@
-// generateSignature.ts
 import { PCD } from "@pcd/pcd-types";
 import { ZKEdDSAEventTicketPCDClaim } from "@pcd/zk-eddsa-event-ticket-pcd";
 import { Groth16Proof } from "@zk-kit/groth16";
@@ -25,6 +24,9 @@ export const generateSignature = async (
       }
 
       const ticketType = matchTicketToType(eventId, productId);
+      if (!ticketType) {
+        throw new Error("Unable to determine ticket type.");
+      }
       groups.push(ticketType);
     }
 
