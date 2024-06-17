@@ -15,7 +15,7 @@ async function login(inputParams: InputParams | null) {
         .map((ticket) => {
           if (ticket.eventId && ticket.productId) {
             return {
-              pcdType: "eddsa-ticket-pcd" as const,
+              pcdType: ticket.pcdType,
               ticketType: ticketType as TicketTypeName,
               eventId: ticket.eventId,
               productId: ticket.productId,
@@ -44,7 +44,7 @@ async function login(inputParams: InputParams | null) {
     watermark,
     config,
     proofTitle: "Sign-In with Zupass",
-    proofDescription: "**Select a valid ticket to hop into the zuzaverse.**",
+    proofDescription: "**Use Zupass to login to Agora City**",
     multi: true
   };
   

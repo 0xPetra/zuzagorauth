@@ -88,7 +88,7 @@ export const whitelistedTickets: Record<
       }
       ],
   ZuVillage: [
-    {
+      {
       pcdType: "eddsa-ticket-pcd",
       productId: "aecf9f84-b92f-5b40-8541-cbb48f4d6267",
       publicKey: ["1ebfb986fbac5113f8e2c72286fe9362f8e7d211dbc68227a468d7b919e75003","10ec38f11baacad5535525bbe8e343074a483c051aa1616266f3b1df3fb7d204"],

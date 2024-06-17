@@ -10,7 +10,7 @@ export const generateSignature = async (
   nonce: string
 ) => {
   try {
-    console.log("🚀 ~ generateSignature ~ pcds:", pcds);
+    // console.log("🚀 ~ generateSignature ~ pcds:", pcds);
 
     const groups: string[] = [];
 
@@ -23,9 +23,8 @@ export const generateSignature = async (
         throw new Error("No product or event selected.");
       }
 
+      console.log("🚀 ~ eventId, productId:", eventId, productId)
       const ticketType = matchTicketToType(eventId, productId);
-      console.log("🚀 ~ productId:", productId)
-      console.log("🚀 ~ eventId:", eventId)
       console.log("🚀 ~ ticketType:", ticketType)
       if (!ticketType) {
         throw new Error("Unable to determine ticket type.");
