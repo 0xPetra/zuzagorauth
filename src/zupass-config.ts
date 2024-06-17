@@ -85,10 +85,11 @@ export const whitelistedTickets: Record<
       eventName: "Vitalia",
       productId: "cd3f2b06-e520-4eff-b9ed-c52365c60848",
       productName: "Resident"
-    }
-  ],
+      }
+      ],
   ZuVillage: [
     {
+      pcdType: "eddsa-ticket-pcd",
       productId: "aecf9f84-b92f-5b40-8541-cbb48f4d6267",
       publicKey: ["1ebfb986fbac5113f8e2c72286fe9362f8e7d211dbc68227a468d7b919e75003","10ec38f11baacad5535525bbe8e343074a483c051aa1616266f3b1df3fb7d204"],
       eventId: "6f5f194b-97b5-5fe9-994d-0998f3eacc75",

@@ -24,6 +24,9 @@ export const generateSignature = async (
       }
 
       const ticketType = matchTicketToType(eventId, productId);
+      console.log("🚀 ~ productId:", productId)
+      console.log("🚀 ~ eventId:", eventId)
+      console.log("🚀 ~ ticketType:", ticketType)
       if (!ticketType) {
         throw new Error("Unable to determine ticket type.");
       }

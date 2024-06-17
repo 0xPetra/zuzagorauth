@@ -120,8 +120,6 @@ const authRoute = async (req: NextApiRequest, res: NextApiResponse) => {
     console.log("Valid PCDs after processing:", validPcds); // Log valid PCDs
 
     if (validPcds.length > 0) {
-      console.log("Valid PCDs for generateSignature:", validPcds);
-
       const { encodedPayload, signature, ticketType } = await generateSignature(
         validPcds,
         nonce
@@ -154,6 +152,7 @@ const authRoute = async (req: NextApiRequest, res: NextApiResponse) => {
     } else {
       res.status(400).json({ message: "No valid PCDs found" });
     }
+
   } catch (error: any) {
     console.error(`[ERROR] ${error.message}`);
     res.status(500).json(`Unknown error: ${error.message}`);
