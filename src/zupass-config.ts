@@ -148,19 +148,6 @@ export const whitelistedTickets: Record<
       eventName: "AgoraCity0",
       productName: "Contributor"
     }
-  ],
-  America: [
-    {
-      pcdType: "eddsa-ticket-pcd",
-      publicKey: [
-        "05e0c4e8517758da3a26c80310ff2fe65b9f85d89dfc9c80e6d0b6477f88173e",
-        "29ae64b615383a0ebb1bc37b3a642d82d37545f0f5b1444330300e4c4eedba3f"
-      ],
-      eventId: "be4dbf9c-abc9-4bc2-a731-3464b84ce3fb",
-      eventName: "ETH Latam",
-      productId: "8d081915-8d2e-4660-adb6-3841960f810f",
-      productName: "Regular ticket"
-    }
   ]
 };
 
