@@ -10,7 +10,7 @@ export const generateSignature = async (
   nonce: string
 ) => {
   try {
-    console.log("🚀 ~ generateSignature ~ pcds:", pcds);
+    // console.log("🚀 ~ generateSignature ~ pcds:", pcds);
 
     const groups: string[] = [];
 
@@ -30,12 +30,19 @@ export const generateSignature = async (
       groups.push(ticketType);
     }
 
+    // Access the first attendee email directly
+    const firstAttendeeEmail = pcds[0]?.claim.partialTicket.attendeeEmail ?? "";
+    const semaphoreIdAttendee =
+      pcds[0]?.claim.partialTicket.attendeeSemaphoreId ?? "";
+
     const payload = {
       nonce: nonce,
-      email: pcds.map((pcd) => pcd.claim.partialTicket.attendeeEmail).join(","), // Concatenate emails
-      external_id: pcds
-        .map((pcd) => pcd.claim.partialTicket.attendeeSemaphoreId)
-        .join(","), // Concatenate semaphore IDs
+      email: firstAttendeeEmail, // Use only the first attendee email
+      // email: pcds.map((pcd) => pcd.claim.partialTicket.attendeeEmail).join(","), // Concatenate emails
+      external_id: semaphoreIdAttendee,
+      // external_id: pcds
+      //   .map((pcd) => pcd.claim.partialTicket.attendeeSemaphoreId)
+      //   .join(","), // Concatenate semaphore IDs
       add_groups: groups.join(",") // Join ticket types with comma separator
     };
 
@@ -57,9 +64,6 @@ export const generateSignature = async (
       .update(encodedPayload)
       .digest("hex");
 
-    console.log("Encoded Payload:", encodedPayload);
-    console.log("Signature:", signature);
-    console.log("groups", groups);
     return { encodedPayload, signature, ticketType: groups };
   } catch (error) {
     console.error("There was an error generating the signature:", error);

@@ -29,8 +29,6 @@ const authRoute = async (req: NextApiRequest, res: NextApiResponse) => {
         .json({ message: "No PCDs specified or invalid input format." });
     }
 
-    console.log("Received PCDs:", pcds); // Log received PCDs
-
     const validPcds: ZKEdDSAEventTicketPCD[] = [];
     const responses: { error: string; status: number }[] = [];
     const nonce = req.session?.nonce;
@@ -42,15 +40,12 @@ const authRoute = async (req: NextApiRequest, res: NextApiResponse) => {
     const bigIntNonce = BigInt("0x" + nonce);
 
     for (const { type, pcd: inputPCD } of pcds) {
-      console.log("Processing PCD:", inputPCD); // Log input PCD
-
       if (type !== "zk-eddsa-event-ticket-pcd") {
         responses.push({ error: `Invalid PCD type: ${type}`, status: 400 });
         continue;
       }
 
       const pcd = await ZKEdDSAEventTicketPCDPackage.deserialize(inputPCD);
-      console.log("Deserialized PCD:", pcd); // Log deserialized PCD
 
       if (!inputPCD || !pcd) {
         responses.push({
@@ -103,25 +98,21 @@ const authRoute = async (req: NextApiRequest, res: NextApiResponse) => {
       }
 
       // Check for duplicate PCDs
-      const existingPcd = validPcds.find(
-        (validPcd) => validPcd.claim.nullifierHash === pcd.claim.nullifierHash
-      );
-      if (!existingPcd) {
-        nullifiers.add(pcd.claim.nullifierHash);
-        req.session.user = pcd.claim.nullifierHash;
-        await req.session.save();
+      // const existingPcd = validPcds.find(
+      //   (validPcd) => validPcd.claim.nullifierHash === pcd.claim.nullifierHash
+      // );
+      // if (!existingPcd) {
+      nullifiers.add(pcd.claim.nullifierHash);
+      req.session.user = pcd.claim.nullifierHash;
+      await req.session.save();
 
-        validPcds.push(pcd);
-      } else {
-        console.log("Duplicate PCD found and skipped:", pcd); // Log duplicate PCD
-      }
+      validPcds.push(pcd);
+      // } else {
+      //   console.log("Duplicate PCD found and skipped:", pcd); // Log duplicate PCD
+      // }
     }
 
-    console.log("Valid PCDs after processing:", validPcds); // Log valid PCDs
-
     if (validPcds.length > 0) {
-      console.log("Valid PCDs for generateSignature:", validPcds);
-
       const { encodedPayload, signature, ticketType } = await generateSignature(
         validPcds,
         nonce
@@ -133,13 +124,32 @@ const authRoute = async (req: NextApiRequest, res: NextApiResponse) => {
           .json({ message: "Signature couldn't be generated" });
       }
 
-      const tickets = whitelistedTickets[ticketType as unknown as TicketType];
-      const publicKey = tickets[0].publicKey;
+      for (let pcd of validPcds) {
+        let isValid = false;
 
-      for (const pcd of validPcds) {
-        if (!isEqualEdDSAPublicKey(publicKey, pcd.claim.signer)) {
+        for (let type of ticketType as TicketType[]) {
+          const tickets = whitelistedTickets[type];
+
+          if (tickets) {
+            for (let ticket of tickets) {
+              const publicKey = ticket.publicKey;
+
+              if (isEqualEdDSAPublicKey(publicKey, pcd.claim.signer)) {
+                isValid = true;
+                break;
+              }
+            }
+          }
+
+          if (isValid) {
+            break;
+          }
+        }
+
+        // If any pcd is not valid, set allValid to false
+        if (!isValid) {
+          console.error(`[ERROR] PCD is not signed by Zupass`);
           responses.push({ error: "PCD is not signed by Zupass", status: 401 });
-          continue;
         }
       }
 

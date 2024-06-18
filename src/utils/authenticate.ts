@@ -11,7 +11,6 @@ export const authenticate = async (
       },
       body: JSON.stringify(multiPCDs)
     });
-    console.log(JSON.stringify(multiPCDs));
     const data = await response.json();
     return data;
   } catch (error) {
