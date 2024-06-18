@@ -14,10 +14,10 @@ export function useZupassPopupMessages() {
     function receiveMessage(ev: MessageEvent<any>) {
       // Extensions including Metamask apparently send messages to every page. Ignore those.
       if (ev.data.encodedPCD) {
-        console.log("Received PCD", ev.data.encodedPCD);
+        // console.log("Received PCD", ev.data.encodedPCD);
         setPCDStr(ev.data.encodedPCD);
       } else if (ev.data.encodedPendingPCD) {
-        console.log(ev.data);
+        // console.log(ev.data);
         setPendingPCDStr(ev.data.encodedPendingPCD);
       }
     }

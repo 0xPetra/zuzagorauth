@@ -21,12 +21,11 @@ export const EVERYONE_SEMAPHORE_GROUP_URL = IS_PROD
   ? "https://api-staging.zupass.org/semaphore/5"
   : "http://localhost:3002/semaphore/5";
 
-  export const ticketTypeNames = [
-    "Zuzalu",
-    "ZuConnect",
-    "Vitalia",
-    "ZuVillage",
-    "Esmeralda",
-    "AgoraCore"
-  ] as const;
-  
+export const ticketTypeNames = [
+  "Zuzalu",
+  "ZuConnect",
+  "Vitalia",
+  "ZuVillage",
+  "Esmeralda",
+  "AgoraCore"
+] as const;

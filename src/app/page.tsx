@@ -1,7 +1,7 @@
 "use client";
 import { useZupass } from "@/zupass";
 import { useZupassPopupMessages } from "@pcd/passport-interface";
-import { PCD, SerializedPCD } from "@pcd/pcd-types";
+import { SerializedPCD } from "@pcd/pcd-types";
 import Link from "next/link";
 import { ReadonlyURLSearchParams, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -13,12 +13,10 @@ import { authenticate } from "../utils/authenticate";
 import { validateSSO } from "../utils/validateSSO";
 
 export default function Home() {
-  const [loading, setloading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [inputParams, setInputParams] = useState<InputParams | null>(null);
   const { login } = useZupass();
-
   const [pcdStr, _pendingPCDStr, multiPCDs] = useZupassPopupMessages();
-  
   const searchParams = useSearchParams();
 
   useEffect(() => {
@@ -27,9 +25,8 @@ export default function Home() {
         const params = await getParams(searchParams);
         if (searchParams) {
           const response = await validateSSO(params?.sso, params?.sig);
-          // TODO: trigger alert if it's not valid
           if (response?.isValid) {
-            setloading(false);
+            setLoading(false);
             setInputParams({ ...params, ...response });
           }
         }
@@ -39,39 +36,35 @@ export default function Home() {
     }
 
     startValidation();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
   useEffect(() => {
-    (async () => {
-      if (multiPCDs) {
-        processProof(multiPCDs);
-      }
-    })();
+    if (multiPCDs) {
+      processProof(multiPCDs);
+    }
   }, [multiPCDs]);
 
   const loginHandler = async () => {
-    setloading(true);
+    setLoading(true);
     await login(inputParams);
   };
 
-  const processProof = async (multiPCDs: SerializedPCD<PCD<unknown, unknown>>[]) => {
+  const processProof = async (multiPCDs: SerializedPCD[]) => {
     try {
       const response = await authenticate(multiPCDs);
-      console.log("🚀 ~ processProof ~ response:", response)
-      const returnSSOURL = inputParams?.return_sso_url; // This is an example; use the actual return_sso_url from your payload.
+      // console.log("🚀 ~ processProof ~ response:", response);
+      console.log(response.encodedPayload);
+      const returnSSOURL = inputParams?.return_sso_url;
 
-      // Return
       if (response && returnSSOURL) {
         const redirectURL = `${returnSSOURL}?sso=${response?.encodedPayload}&sig=${response?.sig}`;
         window.location.href = redirectURL;
       } else {
-        setloading(false);
+        setLoading(false);
       }
     } catch (error) {
       console.error(error);
-      window.location.href = `${inputParams?.return_sso_url}`;
-      setloading(false);
+      setLoading(false);
     }
   };
 
@@ -92,7 +85,6 @@ export default function Home() {
         >
           <img className="logo-image" src="agora-logo.png" alt="agora logo" />
           <Title>Welcome to Agora City!</Title>
-          {/* <Subtitle>Select a resident ticket if you have one.</Subtitle> */}
           <Button onClick={loginHandler}>Sign In</Button>
         </div>
         <Link
@@ -108,18 +100,15 @@ export default function Home() {
 }
 
 const getParams = (searchParams: ReadonlyURLSearchParams | null) => {
-  // Initialize the final object
   const finalObject: any = {};
-  // Check for 'sso' parameter
+
   if (searchParams?.has("sso")) {
-    const ssoString = searchParams?.get("sso");
-    finalObject.sso = ssoString;
+    finalObject.sso = searchParams.get("sso");
   }
 
-  // Check for 'sig' parameter
   if (searchParams?.has("sig")) {
-    const sigString = searchParams?.get("sig");
-    finalObject.sig = sigString;
+    finalObject.sig = searchParams.get("sig");
   }
+
   return finalObject;
 };

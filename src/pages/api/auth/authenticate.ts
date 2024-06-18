@@ -1,8 +1,10 @@
-// pages/api/auth/authenticate.ts
 import { generateSignature } from "@/utils/generateSignature";
 import { supportedEvents, whitelistedTickets } from "@/zupass-config";
 import { isEqualEdDSAPublicKey } from "@pcd/eddsa-pcd";
-import { ZKEdDSAEventTicketPCDPackage } from "@pcd/zk-eddsa-event-ticket-pcd";
+import {
+  ZKEdDSAEventTicketPCD,
+  ZKEdDSAEventTicketPCDPackage
+} from "@pcd/zk-eddsa-event-ticket-pcd";
 import { withIronSessionApiRoute } from "iron-session/next";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -15,117 +17,157 @@ declare module "iron-session" {
   }
 }
 
-const authRoute = async (req: NextApiRequest, res: NextApiResponse) => {
-    try {
-      const { pcds: inputPCDs } = req.body;
-      const pcd = await ZKEdDSAEventTicketPCDPackage.deserialize(req.body.pcd);
-      const nonce = req.session?.nonce
+type TicketType = keyof typeof whitelistedTickets;
 
-      if (req.method !== 'POST') {
-         res.status(405).json({ message: 'Method Not Allowed' });
-         return
+const authRoute = async (req: NextApiRequest, res: NextApiResponse) => {
+  try {
+    const { body: pcds } = req;
+
+    if (!Array.isArray(pcds) || pcds.length === 0) {
+      return res
+        .status(400)
+        .json({ message: "No PCDs specified or invalid input format." });
+    }
+
+    const validPcds: ZKEdDSAEventTicketPCD[] = [];
+    const responses: { error: string; status: number }[] = [];
+    const nonce = req.session?.nonce;
+
+    if (!nonce) {
+      return res.status(401).json({ message: "No nonce in session" });
+    }
+
+    const bigIntNonce = BigInt("0x" + nonce);
+
+    for (const { type, pcd: inputPCD } of pcds) {
+      if (type !== "zk-eddsa-event-ticket-pcd") {
+        responses.push({ error: `Invalid PCD type: ${type}`, status: 400 });
+        continue;
       }
 
-      if (!inputPCDs) {
-         res.status(400).json({ message: 'No PCD specified.' });
-         return
+      const pcd = await ZKEdDSAEventTicketPCDPackage.deserialize(inputPCD);
+
+      if (!inputPCD || !pcd) {
+        responses.push({
+          error: "Invalid PCD format or deserialization error",
+          status: 400
+        });
+        continue;
       }
 
       if (!(await ZKEdDSAEventTicketPCDPackage.verify(pcd))) {
-        console.error(`[ERROR] ZK ticket PCD is not valid`);
-        res.status(401).send("ZK ticket PCD is not valid");
-        return;
-      }
-      
-      if (!nonce) {
-        console.error(`[ERROR]  No nonce in session`);
-        res.status(401).send(" No nonce in session");
-        return;
+        responses.push({ error: "ZK ticket PCD is not valid", status: 401 });
+        continue;
       }
 
-      // CHECK WATERMARK IS SAME AS NONCE SAVED IN /validate-sso
-      const bigIntNonce = BigInt('0x' + nonce);
-      
       if (pcd.claim.watermark.toString() !== bigIntNonce.toString()) {
-        console.error(`[ERROR] PCD watermark doesn't match`);
-        res.status(401).send("PCD watermark doesn't match");
-        return;
+        responses.push({ error: "PCD watermark doesn't match", status: 401 });
+        continue;
       }
 
       if (!pcd.claim.nullifierHash) {
-        console.error(`[ERROR] PCD ticket nullifier has not been defined`);
-        res.status(401).send("PCD ticket nullifer has not been defined");
-        return;
-      }
-
-      if (nullifiers.has(pcd.claim.nullifierHash)) {
-        console.error(`[ERROR] PCD ticket has already been used`);
-        res.status(401).send("PCD ticket has already been used");
-        return;
+        responses.push({
+          error: "PCD ticket nullifier has not been defined",
+          status: 401
+        });
+        continue;
       }
 
       if (pcd.claim.partialTicket.eventId) {
         const eventId = pcd.claim.partialTicket.eventId;
         if (!supportedEvents.includes(eventId)) {
-          console.error(
-            `[ERROR] PCD ticket has an unsupported event ID: ${eventId}`
-          );
-          res.status(400).send("PCD ticket is not for a supported event");
-          return;
+          responses.push({
+            error: `PCD ticket is not for a supported event: ${eventId}`,
+            status: 400
+          });
+          continue;
         }
       } else {
+        let eventError = false;
         for (const eventId of pcd.claim.validEventIds ?? []) {
           if (!supportedEvents.includes(eventId)) {
-            console.error(
-              `[ERROR] PCD ticket might have an unsupported event ID: ${eventId}`
-            );
-            res
-              .status(400)
-              .send("PCD ticket is not restricted to supported events");
-            return;
+            responses.push({
+              error: `PCD ticket is not restricted to supported events: ${eventId}`,
+              status: 400
+            });
+            eventError = true;
+            break;
           }
         }
+        if (eventError) continue;
       }
 
-      // The PCD's nullifier is saved so that it prevents the
-      // same PCD from being reused for another login.
+      // Check for duplicate PCDs
+      // const existingPcd = validPcds.find(
+      //   (validPcd) => validPcd.claim.nullifierHash === pcd.claim.nullifierHash
+      // );
+      // if (!existingPcd) {
       nullifiers.add(pcd.claim.nullifierHash);
-
-      // The user value is anonymous as the nullifier
-      // is the hash of the user's Semaphore identity and the
-      // external nullifier (i.e. nonce).
       req.session.user = pcd.claim.nullifierHash;
       await req.session.save();
 
-      const { encodedPayload, signature, ticketType } = await generateSignature(pcd, nonce)
-      if (!encodedPayload || !signature) {
-        res.status(500).json("Signature couldn't be generated");
-        return
-      }
-
-      if (ticketType === undefined) return;
-
-      const tickets = whitelistedTickets[ticketType];
-      // All event's within the same Ticket Type share the same public keys, so we select the first one.
-      const publicKey = tickets[0].publicKey; 
-      
-      if (!isEqualEdDSAPublicKey(publicKey, pcd.claim.signer)) {
-        console.error(`[ERROR] PCD is not signed by Zupass`);
-        res.status(401).send("PCD is not signed by Zupass");
-        return;
-      }
-
-      res.send({
-        attendeeEmail: pcd.claim.partialTicket.attendeeEmail,
-        encodedPayload,
-        sig: signature
-      })
-      return;
-    } catch (error: any) {
-      console.error(`[ERROR] ${error.message}`);
-      res.status(500).json(`Unknown error: ${error.message}`);
-      return;
+      validPcds.push(pcd);
+      // } else {
+      //   console.log("Duplicate PCD found and skipped:", pcd); // Log duplicate PCD
+      // }
     }
+
+    if (validPcds.length > 0) {
+      const { encodedPayload, signature, ticketType } = await generateSignature(
+        validPcds,
+        nonce
+      );
+
+      if (!encodedPayload || !signature) {
+        return res
+          .status(500)
+          .json({ message: "Signature couldn't be generated" });
+      }
+
+      for (let pcd of validPcds) {
+        let isValid = false;
+
+        for (let type of ticketType as TicketType[]) {
+          const tickets = whitelistedTickets[type];
+
+          if (tickets) {
+            for (let ticket of tickets) {
+              const publicKey = ticket.publicKey;
+
+              if (isEqualEdDSAPublicKey(publicKey, pcd.claim.signer)) {
+                isValid = true;
+                break;
+              }
+            }
+          }
+
+          if (isValid) {
+            break;
+          }
+        }
+
+        // If any pcd is not valid, set allValid to false
+        if (!isValid) {
+          console.error(`[ERROR] PCD is not signed by Zupass`);
+          responses.push({ error: "PCD is not signed by Zupass", status: 401 });
+        }
+      }
+
+      const finalResponse = {
+        attendeeEmail: validPcds[0].claim.partialTicket.attendeeEmail,
+        encodedPayload,
+        sig: signature,
+        status: 200
+      };
+
+      res.status(200).json(finalResponse);
+    } else {
+      res.status(400).json({ message: "No valid PCDs found" });
+    }
+  } catch (error: any) {
+    console.error(`[ERROR] ${error.message}`);
+    res.status(500).json(`Unknown error: ${error.message}`);
+  }
 };
 
 const ironOptions = {
@@ -134,6 +176,6 @@ const ironOptions = {
   cookieOptions: {
     secure: process.env.NODE_ENV === "production"
   }
-}
+};
 
 export default withIronSessionApiRoute(authRoute, ironOptions);
