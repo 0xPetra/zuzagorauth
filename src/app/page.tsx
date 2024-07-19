@@ -5,7 +5,7 @@ import { SerializedPCD } from "@pcd/pcd-types";
 import Link from "next/link";
 import { ReadonlyURLSearchParams, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { OuterContainer, PageContainer, Title } from "../components/Zuzagora";
+import { OuterContainer, PageContainer } from "../components/Zuzagora";
 import { Button } from "../components/core/Button";
 import { RippleLoader } from "../components/core/RippleLoader";
 import { InputParams } from "../types";
@@ -80,11 +80,10 @@ export default function Home() {
     <OuterContainer>
       <PageContainer>
         <div
-          className="flex flex-col"
-          style={{ flexGrow: 1, justifyContent: "center" }}
+          className="flex-col"
+          style={{ justifyContent: "center" }}
         >
-          <img className="logo-image" src="agora-logo.png" alt="agora logo" />
-          <Title>Welcome to Agora City!</Title>
+          <img className="logo-image" src="logoicon.png" alt="agora logo" />
           <Button onClick={loginHandler}>Sign In</Button>
         </div>
         <Link

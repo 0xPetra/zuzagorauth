@@ -21,7 +21,7 @@ export const PageContainer = styled.div`
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   max-width: 400px;
-  width: 100%; // Ensure it takes full width up to max-width
+  width: 90%; // Ensure it takes full width up to max-width
   margin: 0 auto;
   padding: 20px;
   
