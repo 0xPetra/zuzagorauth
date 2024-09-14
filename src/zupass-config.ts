@@ -132,9 +132,9 @@ export const whitelistedTickets: Record<
         "1ebfb986fbac5113f8e2c72286fe9362f8e7d211dbc68227a468d7b919e75003",
         "10ec38f11baacad5535525bbe8e343074a483c051aa1616266f3b1df3fb7d204"
       ],
-      productId: "6c390028-59be-564e-9b3c-33c4af64b8b3",
-      eventId: "21b7c7a1-55d4-50ff-9ca5-4f3644a24680",
-      eventName: "AgoraCity0",
+      productId: "15ab7fc2-eaea-5c0c-87d5-6b233b030a9b",
+      eventId: "3dcdb35d-507c-57e8-8629-5a09239f7033",
+      eventName: "AgoraCity",
       productName: "Founder"
     },
     {
@@ -143,9 +143,9 @@ export const whitelistedTickets: Record<
         "1ebfb986fbac5113f8e2c72286fe9362f8e7d211dbc68227a468d7b919e75003",
         "10ec38f11baacad5535525bbe8e343074a483c051aa1616266f3b1df3fb7d204"
       ],
-      productId: "323c4db4-f999-5839-afc1-ab8e126e4c89",
-      eventId: "fddd7e9a-8e7a-5b54-a5df-deb408d6ab3d",
-      eventName: "AgoraCity0",
+      productId: "28155a86-913f-57dd-a65c-d16ae3149385",
+      eventId: "6900784f-b677-5885-b8fc-bc824cfd88d6",
+      eventName: "AgoraCity",
       productName: "Contributor"
     }
   ]
