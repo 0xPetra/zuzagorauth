@@ -148,6 +148,17 @@ export const whitelistedTickets: Record<
       eventName: "AgoraCity",
       productName: "Contributor"
     }
+  ],
+  ZuThailand: [
+    {
+      "pcdType": "eddsa-ticket-pcd",
+      "publicKey": [
+        "1ebfb986fbac5113f8e2c72286fe9362f8e7d211dbc68227a468d7b919e75003",
+        "10ec38f11baacad5535525bbe8e343074a483c051aa1616266f3b1df3fb7d204"
+      ],
+      "eventId": "aa277c5f-6056-4155-880a-fb9d9325a2dc",
+      "eventName": "ZuThailand"
+    }
   ]
 };
 
